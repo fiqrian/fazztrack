@@ -12,9 +12,10 @@ class Home extends BaseController
 
         $this->data_produk = new data_produk();
 
-        // $this->Request = new Request();
+        //Tools Framework
         helper('form');
         $this->db      = \Config\Database::connect();
+        $this->builder = $this->db->table('users');
         $this->session = \Config\Services::session();
         $this->form_validation = \Config\Services::validation();
         $this->request =  \Config\Services::request();
@@ -25,6 +26,30 @@ class Home extends BaseController
         $query = $this->data_produk->produk();
         $data['produk'] = $query->getResult();
         echo  view('upload_produk', $data);
+    }
+        public function edit_page()
+    {
+
+        $query = $this->data_produk->produk();
+        $data['produk'] = $query->getResult();
+        echo  view('edit_produk', $data);
+    }
+    public function edit_produk(){
+        $request = \Config\Services::request();;
+        $nama_produk = $request->getPost('nama_produk');
+         $keterangan = $request->getPost('keterangan');
+          $harga = $request->getPost('harga');
+           $jumlah = $request->getPost('jumlah');
+        $data = [
+            'nama_produk'=> $nama_produk,
+             'keterangan'=> $keterangan,
+              'harga'=> $harga,
+               'jumlah'=> $jumlah
+        ];
+        $this->data_produk->update_produk();
+        return redirect()->to('/');
+        
+
     }
     public function tambah_produk()
     {
@@ -39,13 +64,17 @@ class Home extends BaseController
         $this->data_produk->simpan_produk($data, 'produk');
         return redirect()->back();
     }
-    public function Get($id = null)
+    public function Get_id_produk($id = null)
     {
-        $data = $this->data_produk-> ($id);
+        $data = $this->data_produk->get_produk_by_id($id);
         echo json_encode($data);
     }
-    public function hapus_produk($id)
+    public function hapus_produk()
     {
-        $this->data_produk->hapusproduk($id);
-    }
+        $request = \Config\Services::request();
+        $id = $request->getPost('id');
+        $this->data_produk->hapusdata($id);
+            return redirect()->back();
+        }
 }
+

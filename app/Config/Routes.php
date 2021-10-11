@@ -33,7 +33,9 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
 $routes->post('/tambah_produk', 'Home::tambah_produk');
-$routes->get('hapus/(:any)', 'Home::hapus_produk/$1');
+$routes->get('Home/Get_id_produk/(:num)', 'Home::Get_id_produk/$1');
+$routes->get('/hapus', 'Home::hapus_produk');
+$routes->post('/edit_produk', 'Home::edit_produk');
 
 
 /*
